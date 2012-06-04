@@ -9,6 +9,8 @@
 
 ## How to use
 
+settings.sample.js をコピーしてsettings.jsというファイルを作り内容を編集してください．
+
     $make setup
     $make run
 
