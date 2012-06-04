@@ -1,0 +1,9 @@
+#ignore vim swap file
+.*.swp
+.lock-*
+#ignore Desktop Service Store files created by mac
+*.DS_Store
+#ignore generated files
+node_modules/*
+
+settings.js
