@@ -1,5 +1,3 @@
-#!/opt/local/bin/node
-
 var Cybozu = require('./thirdparty/cybozu-connect'),
     growl = require('growl'),
     SETTINGS = require('./settings');
