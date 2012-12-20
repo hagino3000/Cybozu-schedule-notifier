@@ -17,7 +17,7 @@
     "url": "git://github.com/hagino3000/Cybozu-schedule-notifier.git"
   },
   "author": "hagino3000",
-  "license": "BSD",
+  "license": "GPL level 2",
   "priveate": true,
   "readmeFilename": "readme.md"
 }
