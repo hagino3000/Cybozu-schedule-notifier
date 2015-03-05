@@ -15,6 +15,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "os" : ["darwin"],
   "repository": {
     "type": "git",
     "url": "https://github.com/hagino3000/Cybozu-schedule-notifier.git"
