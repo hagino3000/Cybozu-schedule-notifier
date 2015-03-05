@@ -1,6 +1,6 @@
 # サイボウズガルーンスケジュール通知 for Mac
 
-サイボウズガルーンのスケジュールをMacOSXの通知センターに通知します
+サイボウズガルーンのスケジュールをMacOSXの通知センターに通知します。cronに仕込んで使うと良いかも。
 
 ## Requirements
 
@@ -27,8 +27,18 @@ $ vim settings.js
 ## Launch
 
 ```
-make run
+$ make run
 ```
+
+or crontab
+
+```
+# Using nodejs installed system
+25,55 * * * *  cd /Users/xxxx/libs/Cybozu-schedule-notifier/; make run
+# Using nodebrew
+25,55 * * * *  /Users/xxxx/libs/Cybozu-schedule-notifier/call_using_nodebrew.sh
+```
+
 
 ## Acknowledgements
 
