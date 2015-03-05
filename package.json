@@ -3,13 +3,13 @@
   "version": "0.0.0",
   "description": "Cybouzu garoon3 schedule notifier",
   "main": "app.js",
-  "engines": {
-    "node": ">=0.12.0"
-  },
   "dependencies": {
-    "node-notifier": "~4.1.2",
-    "jsdom": "~0.2.14",
-    "xmlhttprequest": "~1.4.0"
+    "atob": "^1.1.2",
+    "jsdom": "^0.2.19",
+    "btoa": "^1.1.2",
+    "node-notifier": "^4.1.2",
+    "xmlhttprequest": "^1.5.0",
+    "keychain": "^0.0.4"
   },
   "devDependencies": {},
   "scripts": {
@@ -17,17 +17,16 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/hagino3000/Cybozu-schedule-notifier.git"
+    "url": "https://github.com/hagino3000/Cybozu-schedule-notifier.git"
   },
-  "author": "hagino3000",
-  "license": "GPL level 2",
-  "priveate": true,
-  "bugs": {
-    "url": "https://github.com/hagino3000/Cybozu-schedule-notifier/issues"
-  },
-  "homepage": "https://github.com/hagino3000/Cybozu-schedule-notifier",
   "keywords": [
     "MacOSX",
     "Garoon"
-  ]
+  ],
+  "author": "hagino3000",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hagino3000/Cybozu-schedule-notifier/issues"
+  },
+  "homepage": "https://github.com/hagino3000/Cybozu-schedule-notifier"
 }

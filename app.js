@@ -1,58 +1,74 @@
+var NotificationCenter = require('node-notifier/notifiers/notificationcenter'),
+    keychain = require('keychain');
+
 var Cybozu = require('./thirdparty/cybozu-connect'),
-    NotificationCenter = require('node-notifier/notifiers/notificationcenter'),
     SETTINGS = require('./settings');
 
-Cybozu.init(SETTINGS.JQUERY_PATH, function(API) {
 
-  if (API) {
-    console.log(API);
-    console.log(SETTINGS);
-
-    var con = new API.CybozuConnect.App(SETTINGS.URL,
-                                        SETTINGS.LOGIN_NAME,
-                                        SETTINGS.PASSWORD);
-
-    console.info('Login info ----------------');
-    console.info(con.user);
-
-    // 直近60分のスケジュールを取得する
-    var now = new Date();
-    var offset = 1000*60*60;
-    var end = new Date(+now + offset);
-
-    var schedule = new API.CybozuConnect.Schedule(con);
-    var events = schedule.getEvents({
-      start : now,
-      end : end,
-      userIdList : [con.user.id]
-    }, true);
-
-    if (events.users && events.users[con.user.id]) {
-      var notifyEvents = [];
-      (function processEvents(){
-        var ev = events.users[con.user.id].pop();
-        if (ev) {
-          if (!ev.allDay) {
-            notifyEvents.push({
-              title: ev.title,
-              time: (new Date(ev.start)).toLocaleTimeString() 
-                    + " - " 
-                    + (new Date(ev.end)).toLocaleTimeString(),
-              body: ev.description,
-              location: ev.facilities[0] ? ev.facilities[0].name : '場所の指定無し',
-              url: SETTINGS.URL + "/schedule/view?event=" + ev.id
-            });
-          }
-          processEvents();
-        } else {
-          notify(notifyEvents);
-        }
-      })();
+keychain.getPassword({
+    account: SETTINGS.LOGIN_ACCOUNT,
+    service: SETTINGS.KEYCHAIN_ENTRY_NAME
+}, function(err, password) {
+    if (err) {
+        console.error(err);
+        console.error('Failed to get Password from Keychain.')
+        return;
     }
-  } else {
-    console.info('failed to init cybozu api');
-  }
+
+    Cybozu.init(SETTINGS.JQUERY_PATH, function(API) {
+        if (!API) {
+            console.error('Cannot get Garoon API')
+            return;
+        }
+        console.log(API);
+        console.log(SETTINGS);
+
+        var con = new API.CybozuConnect.App(
+            SETTINGS.URL,
+            SETTINGS.LOGIN_ACCOUNT,
+            password
+        );
+
+        console.info('Login info ----------------');
+        console.info(con.user);
+
+        // 直近60分のスケジュールを取得する
+        var now = new Date();
+        var offset = 1000*60*60;
+        var end = new Date(+now + offset);
+
+        var schedule = new API.CybozuConnect.Schedule(con);
+        var events = schedule.getEvents({
+            start : now,
+            end : end,
+            userIdList : [con.user.id]
+        }, true);
+
+        if (events.users && events.users[con.user.id]) {
+            var notifyEvents = [];
+            (function processEvents(){
+                var ev = events.users[con.user.id].pop();
+                if (ev) {
+                    if (!ev.allDay) {
+                        notifyEvents.push({
+                            title: ev.title,
+                            time: (new Date(ev.start)).toLocaleTimeString() 
+                            + " - " 
+                            + (new Date(ev.end)).toLocaleTimeString(),
+                            body: ev.description,
+                            location: ev.facilities[0] ? ev.facilities[0].name : '場所の指定無し',
+                            url: SETTINGS.URL + "/schedule/view?event=" + ev.id
+                        });
+                    }
+                    processEvents();
+                } else {
+                    notify(notifyEvents);
+                }
+            })();
+        }
+    });
 });
+
 
 function notify(data) {
     data.forEach(function(entry) {

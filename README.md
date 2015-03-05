@@ -1,17 +1,24 @@
 # サイボウズガルーンスケジュール通知 for Mac
 
-サイボウズガルーンのスケジュールをGrowl通知します
+サイボウズガルーンのスケジュールをMacOSXの通知センターに通知します
 
 ## Requirement
 
-- Node.js
-- growlnotify
+- Node.js > 0.10.0
 
-## How to use
+## Setup
 
-settings.sample.js をコピーしてsettings.jsというファイルを作り内容を編集してください．
+```
+# Install node modules
+$ make setup
 
-    $make setup
-    $make run
+# Create settings
+$ cp settings.sample.js settings.js
 
+# Edit settings
+$ vim settings.js
+```
 
+## ログインパスワードについて
+
+ガルーンのログインパスワードはKeychainから取得します、`settings.js` に指定したキーでKeychainに保存してください。
