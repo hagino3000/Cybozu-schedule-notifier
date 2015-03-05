@@ -24,6 +24,12 @@ $ vim settings.js
 
 ガルーンのログインパスワードはKeychainから取得します、`settings.js` に指定したキーでKeychainに保存してください。
 
+## Launch
+
+```
+make run
+```
+
 ## Acknowledgements
 
 - [Cybozu API JavaScript Library](https://code.google.com/p/cybozu-connect/)
