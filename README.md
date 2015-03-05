@@ -2,8 +2,9 @@
 
 サイボウズガルーンのスケジュールをMacOSXの通知センターに通知します
 
-## Requirement
+## Requirements
 
+- MacOSX > 10.9
 - Node.js > 0.10.0
 
 ## Setup
@@ -22,3 +23,8 @@ $ vim settings.js
 ## ログインパスワードについて
 
 ガルーンのログインパスワードはKeychainから取得します、`settings.js` に指定したキーでKeychainに保存してください。
+
+## Acknowledgements
+
+- [Cybozu API JavaScript Library](https://code.google.com/p/cybozu-connect/)
+- [Crystal Project Icons](http://www.softicons.com/system-icons/crystal-project-icons-by-everaldo-coelho)
