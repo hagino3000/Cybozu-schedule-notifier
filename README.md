@@ -1,6 +1,6 @@
-# サイボウズガルーンスケジュール通知 for Mac
+# サイボウズガルーン3スケジュール通知 for Mac
 
-サイボウズガルーンのスケジュールをMacOSXの通知センターに通知します。
+サイボウズガルーン3のスケジュールをMacOSXの通知センターに通知します。
 
 ## Requirements
 
@@ -27,11 +27,14 @@ $ vim settings.js
 ## Launch
 
 ```
-$ make run
+# Test
+$ make login_test
+
+# Schedule Run
+$ make timer
 ```
 
 Keychainを使っているので、cronのセッションからは動きません。
-
 
 ## Acknowledgements
 
