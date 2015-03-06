@@ -5,6 +5,7 @@
   "main": "app.js",
   "dependencies": {
     "jsdom": "^0.2.19",
+    "later": "^1.1.6",
     "node-notifier": "^4.1.2",
     "xmlhttprequest": "^1.5.0",
     "keychain": "^0.0.4"

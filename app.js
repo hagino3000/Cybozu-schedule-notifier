@@ -7,7 +7,7 @@ var Cybozu = require('./thirdparty/cybozu-connect'),
     SETTINGS = require('./settings');
 
 
-function notify(data) {
+function notifySchedule(data) {
     data.forEach(function(entry) {
         var notifier = new NotificationCenter();
         notifier.notify({
@@ -20,36 +20,32 @@ function notify(data) {
     });
 }
 
-function main(err, password) {
-    if (err) {
-        console.error(err);
-        console.error('Failed to get Password from Keychain.');
-        return;
-    }
+function notifyError(message) {
+    console.error(message);
+    var notifier = new NotificationCenter();
+    notifier.notify({
+        title: 'Garoon notifier Error',
+        message: message,
+    });
+}
 
-    Cybozu.init(SETTINGS.JQUERY_PATH, function(API) {
-        if (!API) {
-            console.error('Cannot get Garoon API');
+function createRunner(GaroonAPI, password) {
+    var url = SETTINGS.URL;
+    var account = SETTINGS.LOGIN_ACCOUNT;
+
+    var runner = function() {
+        var con = new GaroonAPI.CybozuConnect.App(url, account, password);
+        if (!con.user) {
+            notifyError('ガルーンにログインできませんでした');
             return;
         }
-        console.log(API);
-        console.log(SETTINGS);
-
-        var con = new API.CybozuConnect.App(
-            SETTINGS.URL,
-            SETTINGS.LOGIN_ACCOUNT,
-            password
-        );
-
-        console.info('Login info ----------------');
-        console.info(con.user);
 
         // 直近60分のスケジュールを取得する
         var now = new Date();
         var offset = 1000*60*60;
         var end = new Date(+now + offset);
 
-        var schedule = new API.CybozuConnect.Schedule(con);
+        var schedule = new GaroonAPI.CybozuConnect.Schedule(con);
         var events = schedule.getEvents({
             start : now,
             end : end,
@@ -57,12 +53,12 @@ function main(err, password) {
         }, true);
 
         if (events.users && events.users[con.user.id]) {
-            var notifyEvents = [];
+            var nearestSchedule = [];
             (function processEvents(){
                 var ev = events.users[con.user.id].pop();
                 if (ev) {
                     if (!ev.allDay) {
-                        notifyEvents.push({
+                        nearestSchedule.push({
                             title: ev.title,
                             time: (new Date(ev.start)).toLocaleTimeString() + ' - ' + (new Date(ev.end)).toLocaleTimeString(),
                             body: ev.description,
@@ -72,23 +68,37 @@ function main(err, password) {
                     }
                     processEvents();
                 } else {
-                    notify(notifyEvents);
+                    notifySchedule(nearestSchedule);
                 }
             })();
         }
-    });
+    };
+    return runner;
 }
 
-function invoke() {
+function getRunner(next) {
     keychain.getPassword({
         account: SETTINGS.LOGIN_ACCOUNT,
         service: SETTINGS.KEYCHAIN_ENTRY_NAME
-    }, main);
-}
+    }, function(err, password) {
+        if (err) {
+            console.error(err);
+            console.error('Failed to get Password from Keychain.');
+            return;
+        }
 
+        Cybozu.init(SETTINGS.JQUERY_PATH, function(API) {
+            if (!API) {
+                console.error('Cannot get Garoon API');
+                return;
+            }
+            next(createRunner(API, password));
+        });
+    });
+}
 
 process.on('uncaughtexception', function(e) {
     console.error(e);
 });
 
-invoke();
+exports.getRunner = getRunner;

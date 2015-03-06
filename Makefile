@@ -11,7 +11,10 @@ clean:
 	rm -rf node_modules
 
 lint:
-	./node_modules/jshint/bin/jshint -c ./.jshintrc ./app.js
+	./node_modules/jshint/bin/jshint -c ./.jshintrc ./*.js
 
-run:
-	@node app.js
+login_test:
+	@node login_test.js
+
+timer:
+	@node start_timer.js
